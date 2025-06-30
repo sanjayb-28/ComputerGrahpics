@@ -5,18 +5,22 @@ all: $(EXE)
 
 #  Msys/MinGW
 ifeq "$(OS)" "Windows_NT"
-CFLG=-O3 -Wall -DUSEGLEW -DSDL2
-LIBS=-lmingw32 -lSDL2main -lSDL2 -mwindows -lSDL2_mixer -lglut -lglew32 -lglu32 -lopengl32 -lm
+CFLG=-O3 -Wall -DSDL2
+LIBS=-lmingw32 -lSDL2main -lSDL2 -mwindows -lSDL2_mixer -lglut -lglu32 -lopengl32 -lm
 CLEAN=rm -f *.exe *.o *.a
 else
 #  OSX
 ifeq "$(shell uname)" "Darwin"
-CFLG=-O3 -Wall -Wno-deprecated-declarations -DSDL2 -DUSEGLEW -I/opt/homebrew/include/SDL2 -I/opt/homebrew/include
+CFLG=-O3 -Wall -Wno-deprecated-declarations -DSDL2 -I/opt/homebrew/include/SDL2 -I/opt/homebrew/include
 LIBS=-L/opt/homebrew/lib -lSDL2 -lSDL2_mixer -lGLEW -framework GLUT -framework Cocoa -framework OpenGL
 #  Linux/Unix/Solaris
 else
-CFLG=-O3 -Wall -DSDL2 -DUSEGLEW
-LIBS=-lSDL2 -lSDL2_mixer -lglut -lGLEW -lGLU -lGL -lm
+# --- GLEW ENABLED (uncomment these two lines to enable GLEW) ---
+#CFLG=-O3 -Wall -DSDL2 -DUSEGLEW
+#LIBS=-lSDL2 -lSDL2_mixer -lglut -lGLEW -lGLU -lGL -lm
+# --- GLEW DISABLED (default, leave these lines uncommented for no GLEW) ---
+CFLG=-O3 -Wall -DSDL2
+LIBS=-lSDL2 -lSDL2_mixer -lglut -lGLU -lGL -lm
 endif
 #  OSX/Linux/Unix/Solaris
 CLEAN=rm -f $(EXE) *.o *.a
@@ -54,7 +58,7 @@ CSCIx229.a:fatal.o errcheck.o print.o loadtexbmp.o loadobj.o projection.o
 
 #  Link
 final: main.o landscape.o shaders.o sky.o sky_clouds.o camera.o fractal_tree.o objects_render.o particles.o boulder.o grass.o sound.o CSCIx229.a
-	gcc $(CFLG) -o $@ $^  $(LIBS)
+	$(CC) $(CFLG) -o $@ $^ $(LIBS)
 
 #  Clean
 clean:
