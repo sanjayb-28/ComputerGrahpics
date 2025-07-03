@@ -43,6 +43,7 @@ static int isValidGrassLocation(Landscape* landscape, float x, float z, float y)
     return slopeDeg <= 32.0f;
 }
 
+// Original code based on the initLandscapeObjects function in objects_render.c
 static void generateGrassBlade(Landscape* landscape, float areaSize, GrassVertex* verts, int* bladeIdx) {
     float clampFactor = 0.98f;
     float halfScale = areaSize * 0.5f * clampFactor;

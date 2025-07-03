@@ -4,7 +4,7 @@
  *   - https://www.ogldev.org/www/tutorial28/tutorial28.html
  *   - https://open.gl/feedback
  *
- * All code is my own original work.
+ * All code is my own original work, except the section marked as AI
  */
 
 #include "CSCIx229.h"

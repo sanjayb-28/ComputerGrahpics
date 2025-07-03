@@ -260,9 +260,8 @@ void display() {
           weatherType == 1 ? "Winter" : "Fall");
     int y = 5;
     glWindowPos2i(5, y);
-    Print("Angle=%d,%d  Dim=%.1f  View=%s   |   Water=%.1f   |   Wireframe=%d   |   Axes=%d   |   TimeAnim: %s  Speed: %.1fx   |   Fog: %s  Snow: %s  |   Sound: %s",
+    Print("Angle=%d,%d  Dim=%.1f  View=%s   |   Wireframe=%d   |   Axes=%d   |   TimeAnim: %s  Speed: %.1fx   |   Fog: %s  Snow: %s  |   Sound: %s",
         th, ph, dim, camera->mode == CAMERA_MODE_FREE_ORBIT ? "Free Orbit" : "First Person",
-        WATER_LEVEL,
         wireframe,
         showAxes,
         animateTime ? "On" : "Off", timeSpeed,
@@ -455,9 +454,9 @@ void keyboard(unsigned char key, int x, int y) {
         case 'm':
             ambientSoundOn = !ambientSoundOn;
             if (ambientSoundOn) {
-                PlayAmbience();
+                soundPlay();
             } else {
-                StopAmbience();
+                soundStop();
             }
             break;
     }
@@ -554,10 +553,10 @@ int main(int argc, char* argv[]) {
     
     particleSystemInit(2000.0f, 20000.0f);
     
-    if (!InitAudio()) {
+    if (!soundInit("sounds/forest-ambience.mp3")) {
         fprintf(stderr, "Failed to initialize audio system.\n");
     } else {
-        PlayAmbience();
+        soundPlay();
     }
     
     glutDisplayFunc(display);
@@ -578,6 +577,6 @@ int main(int argc, char* argv[]) {
     viewCameraDestroy(camera);
     particleSystemCleanup();
     grassSystemCleanup();
-    CleanupAudio();
+    soundCleanup();
     return 0;
 }

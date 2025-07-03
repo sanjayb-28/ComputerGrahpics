@@ -102,7 +102,7 @@ static void boulderShaderUniforms(int colorIndex) {
     glUniform3fv(lightPosLoc, 1, lightPos);
 }
 
-// Original code based on the initLandscapeObjects function in objects_render.c
+// Original code based on the isValidTreeLocation function in objects_render.c
 static int isValidBoulderLocation(Landscape* landscape, float x, float z, float y) {
     float nx = (x / LANDSCAPE_SCALE + 0.5f) * (LANDSCAPE_SIZE - 1);
     float nz = (z / LANDSCAPE_SCALE + 0.5f) * (LANDSCAPE_SIZE - 1);

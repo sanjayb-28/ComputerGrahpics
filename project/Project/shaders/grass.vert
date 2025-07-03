@@ -41,7 +41,6 @@ void main() {
     vAlpha = 1.0 - abs(sway) * 0.5;
     vNormal = normalize(rotY * vec3(0.0, 1.0, 0.0));
     vColorVar = colorVar;
-    // Map vTexCoord for single triangle: (0,0), (1,0), (0.5,1)
     if (abs(offsetX) < 0.001 && abs(offsetY) < 0.001) {
         vTexCoord = vec2(0.0, 0.0); // base left
     } else if (abs(offsetX - bladeWidth) < 0.001 && abs(offsetY) < 0.001) {
