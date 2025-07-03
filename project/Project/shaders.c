@@ -1,16 +1,8 @@
-// ---------------------------------------------
-// shaders.c - Shader loading and management
-// ---------------------------------------------
+// Adapted from CSCI-4229/5229 course examples by professor Willem A. (Vlakkies) Schreuder
 
 #include "CSCIx229.h"
 #include "shaders.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <string.h>
 
-// --- Read text file ---
-/* Loads shader source from file */
 static char* readText(const char* file)
 {
    int   n;
@@ -28,8 +20,6 @@ static char* readText(const char* file)
    return buffer;
 }
 
-// --- Print shader log ---
-/* Shows shader compilation errors */
 static void printShaderLog(int obj,const char* file)
 {
    int len=0;
@@ -45,8 +35,6 @@ static void printShaderLog(int obj,const char* file)
    }
 }
 
-// --- Print program log ---
-/* Shows shader linking errors */
 static void printProgramLog(int obj)
 {
    int len=0;
@@ -62,8 +50,6 @@ static void printProgramLog(int obj)
    }
 }
 
-// --- Load shaders ---
-/* Creates shader program from source files */
 int loadShader(const char* vertexFile, const char* fragmentFile)
 {
    int program = glCreateProgram();
@@ -74,27 +60,25 @@ int loadShader(const char* vertexFile, const char* fragmentFile)
    glCompileShader(vert);
    printShaderLog(vert,vertexFile);
    glAttachShader(program,vert);
-   int frag = glCreateShader(GL_FRAGMENT_SHADER);
-   char* fragmentText = readText(fragmentFile);
-   glShaderSource(frag,1,(const char**)&fragmentText,NULL);
-   free(fragmentText);
-   glCompileShader(frag);
-   printShaderLog(frag,fragmentFile);
-   glAttachShader(program,frag);
+   if (fragmentFile) {
+       int frag = glCreateShader(GL_FRAGMENT_SHADER);
+       char* fragmentText = readText(fragmentFile);
+       glShaderSource(frag,1,(const char**)&fragmentText,NULL);
+       free(fragmentText);
+       glCompileShader(frag);
+       printShaderLog(frag,fragmentFile);
+       glAttachShader(program,frag);
+   }
    glLinkProgram(program);
    printProgramLog(program);
    return program;
 }
 
-// --- Use shader ---
-/* Activates shader for rendering */
 void useShader(int shader)
 {
    glUseProgram(shader);
 }
 
-// --- Delete shader ---
-/* Frees shader resources */
 void deleteShader(int shader)
 {
    glDeleteProgram(shader);

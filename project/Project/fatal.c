@@ -1,14 +1,7 @@
-// ---------------------------------------------
-// fatal.c - Fatal error handling utility
-// ---------------------------------------------
+// Adapted from CSCI-4229/5229 course examples by professor Willem A. (Vlakkies) Schreuder
 
 #include "CSCIx229.h"
 
-// --- Error handling utilities ---
-/*
-   Prints formatted error message to stderr and terminates program
-   Used for unrecoverable errors that require immediate shutdown
-*/
 void Fatal(const char* format , ...)
 {
    va_list args;

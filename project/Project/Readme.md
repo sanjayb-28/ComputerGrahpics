@@ -1,4 +1,5 @@
-# Advanced Terrain Generation System
+# Alpine Wilderness Simulator
+### By: Sanjay Baskaran
 
 An interactive 3D simulation of a natural landscape inspired by the Boulder area, featuring dynamic weather, day/night cycles, and rich environmental interactions.
 
