@@ -1,107 +1,106 @@
 # Advanced Terrain Generation System
 
-A real-time terrain visualization system demonstrating advanced OpenGL graphics techniques. Features procedural terrain, dynamic weather, day/night cycles, and sophisticated environmental effects.
+An interactive 3D simulation of a natural landscape inspired by the Boulder area, featuring dynamic weather, day/night cycles, and rich environmental interactions.
 
-## Key Features Worth An A
-
-1. **Advanced Camera System**
-   - Multiple view modes demonstrating mastery of 3D transformations
-   - Smooth camera interpolation and collision detection
-   - Try pressing: `1` (First Person), `3` (Free Orbit)
-
-2. **Dynamic Environment & Lighting**
-   - Realistic day/night cycle with dynamic lighting
-   - Volumetric cloud system with wind effects
-   - Snow particle system with terrain accumulation
-   - Press `T` to toggle time animation, `W` for weather
-
-3. **Sophisticated Terrain & Vegetation**
-   - Procedurally generated terrain using multi-octave noise
-   - Three distinct tree types with wind animation
-   - Dynamic water system with reflections
-   - Press `w` for wireframe view, `[ ]` to adjust water level
-
-## Quick Demo Path
-1. Launch in Free Orbit mode (`3`) to see overall terrain
-2. Toggle weather (`W`) to see snow effects
-3. Switch to First Person (`1`) to explore ground level
-4. Enable fog (`F`) for atmospheric effects
-5. Cycle through day/night (`T`) to see lighting changes
-
-## Build Instructions
-
-### Prerequisites
-- OpenGL
-- GLUT/FreeGLUT
-- GCC compiler
-- Make
-
-### Compilation
-```bash
-make
-```
-```bash
-./final
-```
+Time Spent: 80 Hours
 
 ## Controls
 
 ### Camera Controls
-- Arrow Keys: Move camera/character
-- Mouse Drag: Look around
-- 1: First Person View
-- 3: Free Orbit View
+- **WASD**: First-person movement (when in FPS mode)
+- **Arrow Keys**: Orbit camera rotation (when in orbit mode)
+- **Mouse**: Look around (FPS mode only)
+- **1**: Switch to First-Person Camera
+- **2**: Switch to Orbit Camera
+- **Z/z**: Zoom in/out (orbit mode)
 
 ### Environment Controls
-- T: Toggle time animation
-- ( ): Adjust time speed
-- F: Toggle fog
-- W: Toggle weather
-- [ ]: Adjust water level
-- 8/9: Adjust fog density
+- **T**: Toggle time animation
+- **K/L**: Decrease/Increase time speed
+- **E**: Toggle weather (Fall/Winter)
+- **N**: Toggle snow particles
+- **B**: Toggle fog
+- **M**: Toggle ambient sound
+- **R**: Reset camera and time
 
 ### Display Controls
-- w: Toggle wireframe mode
-- a: Toggle axes display
-- r: Reset view
-- ESC: Exit
+- **Q**: Toggle wireframe mode
+- **A**: Toggle axes display (orbit mode)
 
-## Code Attribution
+## Key Features
 
-This project incorporates code and techniques from several sources:
+### Procedural Terrain Generation
+- Perlin noise-based heightmap with multiple octaves
+- Dynamic terrain coloring based on slope and height
+- Weather-based seasonal color blending (fall/winter)
+- Animated water rendering with wave effects
 
-1. Core OpenGL Framework and Utilities:
-   - Basic OpenGL setup and utility functions from CSCI-4229/5229 class examples by Willem A. (Vlakkies) Schreuder
-   - Shader management system from LearnOpenGL.com by Joey de Vries
+### Weather System
+- Real-time day/night cycle with smooth color transitions
+- 20,000 GPU-based snow particles with physics
+- Terrain collision and respawn system
+- Wind effects and particle lifetime management
 
-2. Terrain and Environment:
-   - Perlin noise implementation adapted from Ken Perlin's reference code [http://mrl.nyu.edu/~perlin/noise/]
-   - Terrain generation techniques from GPU Gems 3, Chapter 1: "Generating Complex Procedural Terrains"
-   - Water rendering system adapted from OpenGL-Tutorial.org
-   - Cloud system inspired by GPU Gems 2, Chapter 15: "Realistic Cloud Rendering"
+### Camera System
+- Dual camera modes: First-person and free orbit
+- Terrain collision detection and height following
+- Boundary clamping to landscape limits
 
-3. Camera System:
-   - Core camera implementation adapted from LearnOpenGL's Camera tutorial
-   - Multiple view modes and collision detection enhanced with Claude assistance
+### Atmospheric Effects
+- Procedural sky dome with animated sun and moon
+- 88 volumetric clouds
+- OpenGL fog system with time-based density
 
-4. Vegetation System:
-   - Tree generation algorithms adapted from Real-Time Rendering 4th Edition, Chapter 7: "Advanced Shading"
-   - Tree placement and density calculations from GPU Gems 3
-   - Wind animation system developed with Claude assistance
+### Procedural Vegetation
+- 500,000 instanced grass blades with wind animation
+- Recursive fractal tree generation with sway effects
+- 50 procedurally placed boulders with collision detection
+- Grid-based object placement with density control
 
-5. Particle and Weather Effects:
-   - Base particle system adapted from OpenGL-Tutorial.org
-   - Weather simulation enhanced with Clade assistance
-   - Snow accumulation system developed with Claude assistance
+### Audio
+- SDL2-based ambient forest sounds
+- Loopable audio with play/stop controls
 
-6. Lighting and Atmosphere:
-   - Dynamic lighting system based on LearnOpenGL's Advanced Lighting tutorials
-   - Day/night cycle implementation assisted by Claude
-   - Atmospheric effects adapted from OpenGL Red Book
+## Attribution and AI Usage
 
-Detailed attribution comments can be found within individual source files marking specific adapted functions and algorithms.
+### External Sources
+- **Perlin Noise Implementation:** University of Maryland CMSC425 course materials, Stack Overflow community solutions, GitHub procedural terrain generator examples
+- **Camera Concepts:** LearnOpenGL Camera chapter, OpenGL-tutorial.org keyboard/mouse handling, NerdHut arcball camera implementation
+- **Particle System Concepts:** LearnOpenGL 2D Game Particles tutorial, OGLDev transform feedback tutorial, Open.gl feedback documentation
+- **Sphere Implementation:** Song Ho OpenGL sphere tutorial
+- **Grass Rendering Structure:** LearnOpenGL Instancing tutorial
+- **Fractal Recursion Concepts:** GitHub Tree-Generator project, YouTube fractal tree tutorials
+- **Shader Pipeline:** Lighthouse3D GLSL tutorial
+- **Implementation Methods:** SDL2V2 class examples
 
-AI Assistance: Various aspects of this project were developed or enhanced with assistance from Claude (2024), particularly in areas of terrain collision, weather effects, and system integration. These contributions are documented in the source code comments.
+### Claude AI Assistance
+- **Boulder System:** Noise functions, normal computation, mesh generation
+- **Cloud System:** Main implementation based on Real-Time Rendering billboards chapter
+- **Particle System:** Apple platform macros, random particle placement logic
+- **Tree System:** Branch randomization function, leaf segment rendering optimization
+- **Objects System:** Slope calculation function, grid-based placement algorithms
+- **Sky System:** Lighting blending function for proper sun/moon transitions
 
-## Video Demo
-For a complete feature showcase: [Link to presentation](https://youtu.be/P-GCLTKG9bw)
+### Copilot AI Assistance
+- **Boulder System:** Mesh data arrays generation
+- **Various Systems:** Code completion and optimization suggestions
+
+### Original Contributions
+- All particle logic, physics, and rendering (Top Feature)
+- Tree structure, rendering pipeline, animation integration (Top Feature)
+- Weather-based color blending between fall and winter seasons
+- Terrain integration, collision detection, movement logic
+- Sky system logic, celestial body positioning, rendering pipeline
+- Cloud system integration and atmospheric effects
+- Implementation, mesh generation, animation, placement logic
+- Boulder generation logic, placement validation, rendering
+- Object management, validation logic, rendering coordination
+- Audio system integration and controls
+
+## Building and Running
+
+```bash
+cd Project
+make clean && make
+./final
+```

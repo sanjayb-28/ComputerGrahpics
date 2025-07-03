@@ -22,8 +22,13 @@ CFLG=-O3 -Wall -Wno-deprecated-declarations -DRES=$(RES)  # macOS flags
 LIBS=-framework GLUT -framework OpenGL     # macOS frameworks
 # Linux/Unix
 else
+<<<<<<< Updated upstream
 CFLG=-O3 -Wall                   # Standard flags
 LIBS=-lglut -lGLU -lGL -lm       # Unix libraries
+=======
+CFLG=-O3 -Wall -DSDL2
+LIBS=-lSDL2 -lSDL2_mixer -lglut -lGLU -lGL -lm
+>>>>>>> Stashed changes
 endif
 # Non-Windows cleanup
 CLEAN=rm -f $(EXE) *.o *.a
@@ -41,9 +46,9 @@ fatal.o: fatal.c CSCIx229.h
 errcheck.o: errcheck.c CSCIx229.h
 print.o: print.c CSCIx229.h
 loadtexbmp.o: loadtexbmp.c CSCIx229.h
-loadobj.o: loadobj.c CSCIx229.h
 projection.o: projection.c CSCIx229.h
 
+<<<<<<< Updated upstream
 # Additional modules
 shaders.o: shaders.c CSCIx229.h
 sky.o: sky.c sky.h landscape.h
@@ -54,15 +59,23 @@ camera.o: camera.c camera.h
 CSCIx229.a: fatal.o errcheck.o print.o loadtexbmp.o loadobj.o projection.o
 	ar -rcs $@ $^
 
+=======
+>>>>>>> Stashed changes
 # Compile rules
 .c.o:
 	gcc -c $(CFLG) $<
 .cpp.o:
 	g++ -c $(CFLG) $<
 
+<<<<<<< Updated upstream
 # Link executable
 final: main.o landscape.o objects.o weather_particles.o shaders.o sky.o sky_clouds.o camera.o sky_clouds.o CSCIx229.a
 	gcc $(CFLG) -o $@ $^ $(LIBS)
+=======
+#  Link
+final: main.o landscape.o shaders.o sky.o sky_clouds.o camera.o fractal_tree.o objects_render.o particles.o boulder.o grass.o sound.o fatal.o print.o loadtexbmp.o projection.o errcheck.o
+	$(CC) $(CFLG) -o $@ $^ $(LIBS)
+>>>>>>> Stashed changes
 
 # Cleanup
 clean:

@@ -14,9 +14,13 @@
 #include <GL/glu.h>
 #endif
 
+<<<<<<< Updated upstream
 // --- Global scene parameters ---
 /* Water level used for rendering and environmental effects */
 extern float waterLevel;
+=======
+#define WATER_LEVEL -4.0f
+>>>>>>> Stashed changes
 
 // --- Terrain data structures ---
 /* Main landscape structure containing all mesh and terrain data 
@@ -41,7 +45,13 @@ typedef struct {
 extern GLuint grassTexture;
 extern GLuint rockTexture;
 extern GLuint sandTexture;
+<<<<<<< Updated upstream
 extern int terrainShader;
+=======
+extern GLuint boulderTexture;
+extern GLuint barkTexture;
+extern GLuint leafTexture;
+>>>>>>> Stashed changes
 
 // --- Landscape API ---
 /* Core terrain generation and rendering functions */

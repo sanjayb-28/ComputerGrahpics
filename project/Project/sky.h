@@ -23,6 +23,7 @@ typedef struct {
     // Add more fields if needed for stars, planets, etc.
 } SkySystem;
 
+<<<<<<< Updated upstream
 // --- Sky system API ---
 /* Initializes sky system with default parameters */
 void skySystemInit(SkySystem* sky);
@@ -38,5 +39,14 @@ void skySystemUpdateLighting(SkySystem* sky);
 
 /* Frees resources used by the sky system */
 void skySystemDestroy(SkySystem* sky);
+=======
+void skySystemInitialize(SkySystem* sky);
+
+void skySystemAdvance(SkySystem* sky, float dayTime);
+
+void skySystemRender(SkySystem* sky, float dayTime);
+
+void skySystemApplyLighting(SkySystem* sky);
+>>>>>>> Stashed changes
 
 #endif

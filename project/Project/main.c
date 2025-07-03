@@ -29,16 +29,26 @@
 #include <string.h>
 #include <math.h>
 
+<<<<<<< Updated upstream
 // --- Global state ---
 /* Environmental systems and rendering resources */
 static SkyCloudSystem* cloudSystem = NULL;
+=======
+static AtmosphericCloudSystem* cloudSystem = NULL;
+>>>>>>> Stashed changes
 static SkySystem skySystemInstance;
 
 GLuint grassTexture = 0;
 GLuint rockTexture = 0;
 GLuint sandTexture = 0;
+<<<<<<< Updated upstream
 int terrainShader = 0;
 int skyShader = 0;
+=======
+GLuint boulderTexture = 0;
+GLuint barkTexture = 0;
+GLuint leafTexture = 0;
+>>>>>>> Stashed changes
 
 static int th = 45;
 static int ph = 10;
@@ -49,8 +59,12 @@ static float lightHeight = 250.0f;
 static float dayTime = 0.0f;
 static float windStrength = 0.0f;
 
+<<<<<<< Updated upstream
 float waterLevel = -4.0f;
 static float waterSpeed = 1.0f;
+=======
+#define WATER_LEVEL -4.0f
+>>>>>>> Stashed changes
 static float waterTime = 0.0f;
 static int animateWater = 1;
 
@@ -90,6 +104,7 @@ float asp;
 static int lastX = 0, lastY = 0;
 static int mouseButtons = 0;
 
+<<<<<<< Updated upstream
 /* Environment object collections */
 static RockField* rocks = NULL;
 static ShrubField* shrubs = NULL;
@@ -112,6 +127,27 @@ static const float INIT_FP_YAW = 45.0f, INIT_FP_PITCH = 10.0f;
 static GullFlock* gullFlock = NULL;
 
 static int showBirds = 1;
+=======
+float treeSwayAngle = 0.0f;
+
+static int snowOn = 0;
+static int weatherType = 0;
+
+static int ambientSoundOn = 1;
+
+#define DIM_MIN 30.0f
+#define DIM_MAX 200.0f
+
+void clampAndSyncDim() {
+    if (dim < DIM_MIN) dim = DIM_MIN;
+    if (dim > DIM_MAX) dim = DIM_MAX;
+    if (camera) {
+        if (camera->orbitDistance < DIM_MIN) camera->orbitDistance = DIM_MIN;
+        if (camera->orbitDistance > DIM_MAX) camera->orbitDistance = DIM_MAX;
+        dim = camera->orbitDistance = (dim + camera->orbitDistance) * 0.5f;
+    }
+}
+>>>>>>> Stashed changes
 
 // --- Function declarations ---
 void reshape(int width, int height);
@@ -120,6 +156,7 @@ void special(int key, int x, int y);
 void keyboard(unsigned char key, int x, int y);
 void idle();
 
+<<<<<<< Updated upstream
 #define MAX_STARS 1000
 // Simple star struct for night sky
 typedef struct {
@@ -130,6 +167,8 @@ Star stars[MAX_STARS];
 
 // --- Window reshape handler ---
 /* Updates projection matrix when window size changes */
+=======
+>>>>>>> Stashed changes
 void reshape(int width, int height) {
     asp = (height>0) ? (double)width/height : 1;
     glViewport(0,0, RES*width,RES*height);
@@ -160,8 +199,11 @@ float smoothstep(float edge0, float edge1, float x) {
     return t * t * (3.0f - 2.0f * t);
 }
 
+<<<<<<< Updated upstream
 // --- Sky color interpolation for day/night cycle ---
 /* Computes sky color based on time of day with smooth transitions */
+=======
+>>>>>>> Stashed changes
 void getSkyColor(float time, float* color) {
     float t = time / 24.0f;  
     const int NUM_COLORS = 6;
@@ -181,12 +223,11 @@ void getSkyColor(float time, float* color) {
     float segmentPos = (t - timePoints[i]) / (timePoints[i+1] - timePoints[i]);
     float blend = smoothstep(0.0f, 1.0f, segmentPos);
     float sunHeight = sin(t * 2.0f * M_PI);
-    float atmosphericBlend = fmax(0.0f, sunHeight * 0.2f);
     for(int j = 0; j < 3; j++) {
         color[j] = colors[i][j] * (1.0f - blend) + colors[i+1][j] * blend;
     }
     if(sunHeight > 0) {
-        color[2] = fmin(1.0f, color[2] + atmosphericBlend * 0.2f);
+        color[2] = fmin(1.0f, color[2] + sunHeight * 0.04f);
     }
     if(t < 0.1f || t > 0.9f) {
         float nightBlend = (t < 0.1f) ? (t / 0.1f) : ((1.0f - t) / 0.1f);
@@ -198,6 +239,7 @@ void getSkyColor(float time, float* color) {
     }
 }
 
+<<<<<<< Updated upstream
 // --- Update ambient and diffuse lighting for day/night ---
 /* Adjusts scene lighting based on time of day */
 void updateDayCycle() {
@@ -296,6 +338,8 @@ void updateDynamicLighting(float dayTime) {
 
 // --- Animate tree swaying for wind effect ---
 /* Updates tree tilt angles based on wind strength and time */
+=======
+>>>>>>> Stashed changes
 void updateTreeAnimation() {
     static float windTime = 0.0f;
     windTime += deltaTime;
@@ -307,8 +351,11 @@ void updateTreeAnimation() {
     }
 }
 
+<<<<<<< Updated upstream
 // --- Lighting/material setup ---
 /* Configures OpenGL lighting state for the scene */
+=======
+>>>>>>> Stashed changes
 void setupLighting() {
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
@@ -322,12 +369,16 @@ void setupLighting() {
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 }
 
+<<<<<<< Updated upstream
 // --- Fog effect for atmosphere ---
 /* Configures fog parameters based on time of day */
+=======
+>>>>>>> Stashed changes
 void updateFog(float dayTime) {
     float timeNormalized = dayTime / 24.0f;
     float sunAngle = (timeNormalized - 0.25f) * 2 * M_PI;
     float sunHeight = sin(sunAngle);
+<<<<<<< Updated upstream
     float baseDensity;
     float fogColor[4];
     if (sunHeight > 0) {
@@ -340,8 +391,15 @@ void updateFog(float dayTime) {
         fogColor[0] = 0.7f;
         fogColor[1] = 0.7f;
         fogColor[2] = 0.7f;
+=======
+    float baseDensity = 0.008f;
+    float fogColor[4] = {0.95f, 0.95f, 0.95f, 1.0f};
+    
+    if (sunHeight <= 0) {
+        fogColor[0] = fogColor[1] = fogColor[2] = 0.7f;
+>>>>>>> Stashed changes
     }
-    fogColor[3] = 1.0f;
+    
     if (fogEnabled) {
         glEnable(GL_FOG);
         glFogi(GL_FOG_MODE, GL_EXP2);
@@ -355,8 +413,11 @@ void updateFog(float dayTime) {
     }
 }
 
+<<<<<<< Updated upstream
 // --- OpenGL state initialization ---
 /* Sets up global rendering state for the scene */
+=======
+>>>>>>> Stashed changes
 void initGL() {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
@@ -368,8 +429,11 @@ void initGL() {
     glPolygonOffset(1.0f, 1.0f);
 }
 
+<<<<<<< Updated upstream
 // --- Main display/render function ---
 /* Renders the complete scene with all objects and effects */
+=======
+>>>>>>> Stashed changes
 void display() {
     float skyColor[3];
     getSkyColor(dayTime, skyColor);
@@ -379,8 +443,9 @@ void display() {
     gluLookAt(camera->position[0], camera->position[1], camera->position[2],
               camera->lookAt[0], camera->lookAt[1], camera->lookAt[2],
               camera->upVec[0], camera->upVec[1], camera->upVec[2]);
-    skySystemRenderSunAndMoon(&skySystemInstance, dayTime);
+    skySystemRender(&skySystemInstance, dayTime);
     updateFog(dayTime);
+<<<<<<< Updated upstream
     updateDynamicLighting(dayTime);
     landscapeRender(landscape, weatherType);
     useShader(0);
@@ -423,12 +488,38 @@ void display() {
     // --- Render animated gull flock only ---
     if (showBirds && gullFlock) {
         gullFlockRender(gullFlock, 0);
+=======
+    if (cloudSystem) {
+        glDepthMask(GL_FALSE);
+        atmosphericCloudSystemRender(cloudSystem);
+        glDepthMask(GL_TRUE);
+    }
+    landscapeRender(landscape, weatherType);
+    float timeNormalized = dayTime / 24.0f;
+    float sunAngle = (timeNormalized - 0.25f) * 2 * M_PI;
+    float sunHeight = sin(sunAngle);
+    float sunX = 500 * cos(sunAngle);
+    float sunY = lightHeight * sunHeight;
+    float sunZ = 0;
+    float sunDir[3];
+    float len = sqrtf(sunX*sunX + sunY*sunY + sunZ*sunZ);
+    sunDir[0] = sunX / len;
+    sunDir[1] = sunY / len;
+    sunDir[2] = sunZ / len;
+    float ambient[3];
+    if (sunHeight > 0) {
+        ambient[0] = ambient[1] = ambient[2] = 0.15f + sunHeight * 0.15f;
+    } else {
+        ambient[0] = 0.02f;
+        ambient[1] = 0.02f;
+        ambient[2] = 0.04f;
+>>>>>>> Stashed changes
     }
     glDisable(GL_LIGHTING);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDepthMask(GL_FALSE);
-    landscapeRenderWater(waterLevel, landscape, dayTime);
+    landscapeRenderWater(WATER_LEVEL, landscape, dayTime);
     glDepthMask(GL_TRUE);
     if (snowEnabled && snowSystem) {
         glDisable(GL_FOG);
@@ -465,7 +556,7 @@ void display() {
     glWindowPos2i(5, y);
     Print("Angle=%d,%d  Dim=%.1f  View=%s   |   Water=%.1f   |   Wireframe=%d   |   Axes=%d   |   TimeAnim: %s  Speed: %.1fx   |   Fog: %s   |   Birds: %s   |   Snow: %s   |   Rain: %s",
         th, ph, dim, camera->mode == CAMERA_MODE_FREE_ORBIT ? "Free Orbit" : "First Person",
-        waterLevel,
+        WATER_LEVEL,
         wireframe,
         showAxes,
         animateTime ? "On" : "Off", timeSpeed,
@@ -477,6 +568,7 @@ void display() {
     glutSwapBuffers();
 }
 
+<<<<<<< Updated upstream
 // --- Sky shader loader ---
 /* Initializes the sky background shader program */
 void initSkyBackground() {
@@ -485,6 +577,8 @@ void initSkyBackground() {
 
 // --- Mouse button handler ---
 /* Processes mouse button events for camera control */
+=======
+>>>>>>> Stashed changes
 void mouse(int button, int state, int x, int y) {
     lastX = x;
     lastY = y;
@@ -507,6 +601,7 @@ void mouse(int button, int state, int x, int y) {
     glutPostRedisplay();
 }
 
+<<<<<<< Updated upstream
 // --- Mouse drag handler ---
 /* Processes mouse movement for camera rotation and zoom */
 void mouseMotion(int x, int y) {
@@ -533,14 +628,24 @@ void mouseMotion(int x, int y) {
         if (mouseButtons & 1) {
             viewCameraRotate(camera, dx * 0.5f, -dy * 0.5f);
         }
+=======
+void mouseMotion(int x, int y) {
+    int dx = x - lastX;
+    int dy = y - lastY;
+    if (camera->mode != CAMERA_MODE_FREE_ORBIT && (mouseButtons & 1)) {
+        viewCameraRotate(camera, dx * 0.5f, -dy * 0.5f);
+>>>>>>> Stashed changes
     }
     lastX = x;
     lastY = y;
     glutPostRedisplay();
 }
 
+<<<<<<< Updated upstream
 // --- Keyboard special keys (arrows, page up/down) ---
 /* Processes special key presses for camera movement */
+=======
+>>>>>>> Stashed changes
 void special(int key, int x, int y) {
     float deltaTime = 0.016f;
     if (camera && camera->mode == CAMERA_MODE_FREE_ORBIT) {
@@ -602,27 +707,53 @@ void special(int key, int x, int y) {
     glutPostRedisplay();
 }
 
+<<<<<<< Updated upstream
 // --- Keyboard handler for all main controls ---
 /* Processes standard key presses for scene control and effects */
+=======
+>>>>>>> Stashed changes
 void keyboard(unsigned char key, int x, int y) {
     switch(key) {
         case 27:  // ESC key
             exit(0);
             break;
-        case 'w':
+        case 'q':
+        case 'Q':
             wireframe = !wireframe;
             glPolygonMode(GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL);
             break;
-        case '[':
-            waterLevel -= 1.0f;
+        case 'e':
+        case 'E':
+            weatherType = !weatherType;
             break;
-        case ']':
-            waterLevel += 1.0f;
+        case 'w':
+        case 'W':
+            if (camera->mode == CAMERA_MODE_FIRST_PERSON) {
+                viewCameraMove(camera, CAMERA_MOVE_FORWARD, 0.016f);
+            }
+            break;
+        case 's':
+        case 'S':
+            if (camera->mode == CAMERA_MODE_FIRST_PERSON) {
+                viewCameraMove(camera, CAMERA_MOVE_BACKWARD, 0.016f);
+            }
             break;
         case 'a':
-            showAxes = !showAxes;
+        case 'A':
+            if (camera->mode == CAMERA_MODE_FIRST_PERSON) {
+                viewCameraMove(camera, CAMERA_MOVE_LEFT, 0.016f);
+            } else {
+                showAxes = !showAxes;
+            }
+            break;
+        case 'd':
+        case 'D':
+            if (camera->mode == CAMERA_MODE_FIRST_PERSON) {
+                viewCameraMove(camera, CAMERA_MOVE_RIGHT, 0.016f);
+            }
             break;
         case 'r':
+<<<<<<< Updated upstream
             // Reset all persistent state
             lastOrbitYaw = INIT_ORBIT_YAW;
             lastOrbitPitch = INIT_ORBIT_PITCH;
@@ -639,6 +770,14 @@ void keyboard(unsigned char key, int x, int y) {
             ph = INIT_ORBIT_PH < 10 ? 10 : INIT_ORBIT_PH;
             dim = INIT_ORBIT_DIM;
             waterLevel = -4.0f;
+=======
+            th = 45; ph = 10; dim = 70.0f;
+            camera->orbitYaw = th;
+            camera->orbitPitch = ph;
+            camera->orbitDistance = dim;
+            clampAndSyncDim();
+            waterTime = 0.0f;
+>>>>>>> Stashed changes
             lightHeight = 250.0f;
             waterSpeed = 1.0f;
             lightSpeed = 1.0f;
@@ -650,6 +789,7 @@ void keyboard(unsigned char key, int x, int y) {
             viewCameraUpdateVectors(camera);
             break;
         case '1': {
+<<<<<<< Updated upstream
             // Switch to first person, restore last FP state
             lastOrbitYaw = camera->horizontalAngle;
             lastOrbitPitch = camera->verticalAngle;
@@ -663,12 +803,21 @@ void keyboard(unsigned char key, int x, int y) {
             camera->position[2] = lastFPPos[2];
             float groundHeight = landscapeGetHeight(landscape, camera->position[0], camera->position[2]);
             camera->position[1] = groundHeight + 2.0f;
+=======
+            camera->fpYaw = 45.0f;
+            camera->fpPitch = 10.0f;
+            camera->fpPosition[0] = 0.0f;
+            camera->fpPosition[2] = 0.0f;
+            float groundHeight = landscapeGetHeight(landscape, camera->fpPosition[0], camera->fpPosition[2]);
+            camera->fpPosition[1] = groundHeight + 2.0f;
+>>>>>>> Stashed changes
             viewCameraSetMode(camera, CAMERA_MODE_FIRST_PERSON);
             viewCameraUpdateVectors(camera);
             viewCameraSetProjection(camera, 55.0f, asp, dim/4, dim*4);
             break;
         }
         case '2': {
+<<<<<<< Updated upstream
             // Switch to orbit, restore last orbit state
             lastFPPos[0] = camera->position[0];
             lastFPPos[1] = camera->position[1];
@@ -681,6 +830,13 @@ void keyboard(unsigned char key, int x, int y) {
             th = lastOrbitTh;
             ph = lastOrbitPh < 10 ? 10 : lastOrbitPh;
             dim = lastOrbitDim;
+=======
+            camera->orbitYaw = 45.0f;
+            camera->orbitPitch = 10.0f;
+            camera->orbitDistance = 70.0f;
+            th = 45; ph = 10; dim = 70.0f;
+            clampAndSyncDim();
+>>>>>>> Stashed changes
             viewCameraSetMode(camera, CAMERA_MODE_FREE_ORBIT);
             viewCameraUpdateVectors(camera);
             break;
@@ -725,8 +881,22 @@ void keyboard(unsigned char key, int x, int y) {
                 Project(fov?55:0, asp, dim);
             }
             break;
+<<<<<<< Updated upstream
         case 'v':
             showBirds = !showBirds;
+=======
+        case 'n':
+            snowOn = !snowOn;
+            particleSystemSetEnabled(snowOn);
+            break;
+        case 'm':
+            ambientSoundOn = !ambientSoundOn;
+            if (ambientSoundOn) {
+                PlayAmbience();
+            } else {
+                StopAmbience();
+            }
+>>>>>>> Stashed changes
             break;
     }
     glutPostRedisplay();
@@ -757,6 +927,7 @@ void idle() {
     if (animateWater) {
         waterTime += deltaTime;
     }
+<<<<<<< Updated upstream
     glutPostRedisplay();
 }
 
@@ -777,6 +948,14 @@ void initWeatherSystem() {
 
 // --- Main entry point ---
 /* Program initialization and main loop entry */
+=======
+    if (snowOn) {
+        particleSystemUpdate(deltaTime);
+    }
+    glutPostRedisplay();
+}
+
+>>>>>>> Stashed changes
 int main(int argc, char* argv[]) {
     glutInit(&argc,argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE | GLUT_STENCIL);
@@ -796,6 +975,7 @@ int main(int argc, char* argv[]) {
         fprintf(stderr, "Failed to create camera\n");
         return 1;
     }
+<<<<<<< Updated upstream
     
     // Set up initial camera configuration
     lastOrbitYaw = INIT_ORBIT_YAW;
@@ -844,10 +1024,23 @@ int main(int argc, char* argv[]) {
     // Initialize sky and cloud systems
     skySystemInit(&skySystemInstance);
     cloudSystem = skyCloudSystemCreate(LANDSCAPE_SCALE * 0.4f);
+=======
+ 
+    camera->orbitYaw = 45.0f;
+    camera->orbitPitch = 10.0f;
+    camera->orbitDistance = 70.0f;
+    th = 45; ph = 10; dim = 70.0f;
+    viewCameraSetMode(camera, CAMERA_MODE_FREE_ORBIT);
+    viewCameraUpdateVectors(camera);
+    
+    skySystemInitialize(&skySystemInstance);
+    cloudSystem = atmosphericCloudSystemCreate(LANDSCAPE_SCALE * 0.4f);
+>>>>>>> Stashed changes
     if (!cloudSystem) {
         fprintf(stderr, "Failed to create cloud system\n");
         return 1;
     }
+<<<<<<< Updated upstream
     
     // Load shaders and textures
     terrainShader = loadShader("shaders/terrain_shader.vert", "shaders/terrain_shader.frag");
@@ -864,6 +1057,9 @@ int main(int argc, char* argv[]) {
         fprintf(stderr, "Failed to load grass texture\n");
         return 1;
     }
+=======
+
+>>>>>>> Stashed changes
     if (!(rockTexture = LoadTexBMP("tex/rocky.bmp"))) {
         fprintf(stderr, "Failed to load rock texture\n");
         return 1;
@@ -876,12 +1072,6 @@ int main(int argc, char* argv[]) {
     // Generate scene content
     forestSystemGenerate(forest, landscape);
     setupLighting();
-    float mSpecular[] = {0.3f, 0.3f, 0.3f, 1.0f};
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mSpecular);
-    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 30.0f);
-    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_NORMALIZE);
     lastTime = glutGet(GLUT_ELAPSED_TIME) / 1000.0f;
     
     // Initialize decorative scene elements
@@ -892,8 +1082,16 @@ int main(int argc, char* argv[]) {
     logs = logFieldCreate(60);
     logFieldGenerate(logs, landscape);
     
+<<<<<<< Updated upstream
     // Load gull OBJ model
     gullFlock = gullFlockCreate(8, 4, LANDSCAPE_SCALE);
+=======
+    if (!InitAudio()) {
+        fprintf(stderr, "Failed to initialize audio system.\n");
+    } else {
+        PlayAmbience();
+    }
+>>>>>>> Stashed changes
     
     // Set up GLUT callbacks
     glutDisplayFunc(display);
@@ -913,6 +1111,7 @@ int main(int argc, char* argv[]) {
     weatherParticleSystemDestroy(rainSystem);
     forestSystemDestroy(forest);
     landscapeDestroy(landscape);
+<<<<<<< Updated upstream
     skyCloudSystemDestroy(cloudSystem);
     deleteShader(terrainShader);
     deleteShader(skyShader);
@@ -923,5 +1122,14 @@ int main(int argc, char* argv[]) {
     skySystemDestroy(&skySystemInstance);
     gullFlockDestroy(gullFlock);
     
+=======
+    freeBoulders();
+    freeLandscapeObjects();
+    atmosphericCloudSystemDestroy(cloudSystem);
+    viewCameraDestroy(camera);
+    particleSystemCleanup();
+    grassSystemCleanup();
+    CleanupAudio();
+>>>>>>> Stashed changes
     return 0;
 }
